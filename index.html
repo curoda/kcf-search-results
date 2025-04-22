@@ -4,95 +4,53 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KCF Technologies — Search</title>
-  <!-- ─────────────  BASIC STYLES  ───────────── -->
+  <title>KCF Technologies — Site Search</title>
   <style>
     :root {
       --kcf-blue: #003e6b;
       --kcf-accent: #00aeef;
     }
-    * {box-sizing:border-box;}
-    body {
-      margin:0;
-      font-family:"Inter", "Helvetica Neue", Arial, sans-serif;
-      background:#fff;
-      color:#1a1d1f;
-      line-height:1.45;
-    }
-    /* Full‑width header image */
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:"Inter","Helvetica Neue",Arial,sans-serif;line-height:1.45;color:#1a1d1f;background:#fff;}
+
+    /* Full‑width brand image */
     .hero-img{display:block;width:100%;height:auto;object-fit:cover;}
 
-    /* Header */
-    header{
-      background:var(--kcf-blue);
-      padding:20px clamp(16px,5vw,64px);
-      display:flex;
-      align-items:center;
-      gap:40px;
-      flex-wrap:wrap;
-    }
-    header a.logo{
-      display:flex;
-      align-items:center;
-      color:#fff;
-      font-size:24px;
-      font-weight:600;
-      text-decoration:none;
-    }
-    /* Search bar */
-    form#searchForm{
-      flex:1 1 480px;
-      position:relative;
-    }
-    #queryInput{
-      width:100%;
-      padding:14px 48px 14px 20px;
-      border-radius:8px;
-      border:none;
-      font-size:18px;
-    }
-    #searchBtn{
-      position:absolute;right:12px;top:50%;transform:translateY(-50%);
-      border:none;background:none;color:#444;cursor:pointer;font-size:20px;
-    }
+    /* Header nav + search */
+    header{background:var(--kcf-blue);padding:20px clamp(16px,5vw,64px);display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
+    header a.logo{color:#fff;font-size:24px;font-weight:600;text-decoration:none;display:flex;align-items:center;}
+
+    form#searchForm{flex:1 1 480px;position:relative;}
+    #queryInput{width:100%;padding:14px 48px 14px 20px;border-radius:8px;border:none;font-size:18px;}
+    #searchBtn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:20px;cursor:pointer;color:#444;}
+
     /* Layout */
-    .wrap{display:grid;grid-template-columns:1fr 280px;gap:48px;padding:40px clamp(16px,5vw,64px);max-width:1400px;margin:0 auto;}
-    @media(max-width:1023px){.wrap{grid-template-columns:1fr;}}
+    .wrap{max-width:1400px;margin:0 auto;padding:40px clamp(16px,5vw,64px);display:grid;grid-template-columns:1fr 280px;gap:48px;}
+    @media(max-width:1023px){.wrap{grid-template-columns:1fr;}aside.cta{display:none;}}
 
     /* Answer card */
-    #answerCard{
-      border:1px solid var(--kcf-blue);
-      border-radius:6px;
-      padding:24px;
-      margin-bottom:32px;
-    }
-    #answerCard h2{margin-top:0;color:var(--kcf-blue);font-size:24px;}
+    #answerCard{border:1px solid var(--kcf-blue);border-radius:6px;padding:24px;margin-bottom:32px;display:none;}
+    #answerCard h2{margin:0 0 12px 0;color:var(--kcf-blue);font-size:24px;}
     #sources{list-style:none;padding:0;margin:16px 0 0 0;}
     #sources li{margin-bottom:4px;}
     #sources a{color:var(--kcf-accent);text-decoration:none;}
-    .feedbackBtn{border:none;background:none;cursor:pointer;font-size:22px;margin-right:6px;}
+    .feedbackBtn{border:none;background:none;font-size:22px;cursor:pointer;margin-right:6px;}
 
-    /* Results */
+    /* Results list */
     #results{list-style:none;padding:0;margin:0;}
     .result{padding:16px 0;border-bottom:1px solid #e5e8f0;}
     .result a.title{font-weight:600;color:var(--kcf-blue);font-size:20px;text-decoration:none;}
     .snippet{margin-top:4px;font-size:15px;color:#444;}
 
     /* CTA rail */
-    aside.cta{
-      display:flex;flex-direction:column;gap:16px;
-      border:1px solid #e5e8f0;border-radius:6px;padding:24px;
-    }
-    aside.cta h3{margin:0 0 8px 0;font-size:22px;color:var(--kcf-blue);}
+    aside.cta{border:1px solid #e5e8f0;border-radius:6px;padding:24px;display:flex;flex-direction:column;gap:16px;}
+    aside.cta h3{margin:0;font-size:22px;color:var(--kcf-blue);} 
     .btn-demo{border:2px solid var(--kcf-blue);background:none;padding:10px 20px;border-radius:6px;font-weight:600;cursor:pointer;}
-    @media(max-width:1023px){aside.cta{display:none;}}
   </style>
 </head>
 <body>
-  <!-- ─────────────  FULL‑WIDTH BRAND IMAGE  ───────────── -->
   <img src="kcf header.jpg" alt="KCF Technologies visual header" class="hero-img" />
 
-  <!-- ─────────────  HEADER NAV + SEARCH  ───────────── -->
   <header>
     <a href="/" class="logo">KCF</a>
     <form id="searchForm" role="search">
@@ -100,20 +58,18 @@
       <button id="searchBtn" aria-label="search">🔍</button>
     </form>
   </header>
-
-  <!-- ─────────────  MAIN WRAP  ───────────── -->
   <section class="wrap">
     <main>
-      <article id="answerCard" hidden>
+      <article id="answerCard">
         <h2 id="answerHeading"></h2>
         <div id="answerBody"></div>
         <ul id="sources"></ul>
-        <div id="feedback" style="margin-top:12px;">
-          Helpful?
+        <div style="margin-top:12px;">Helpful?
           <button class="feedbackBtn" data-val="1">👍</button>
           <button class="feedbackBtn" data-val="-1">👎</button>
         </div>
       </article>
+
       <ol id="results"></ol>
       <button id="loadMore" class="btn-demo" style="display:none;">Load more results</button>
     </main>
@@ -126,125 +82,91 @@
     </aside>
   </section>
 
-  <!-- ─────────────  DOCSBOT API   ───────────── -->
   <script>
-    /*
-      🔑  >>>>  FILL THESE IN  <<<<
-    */
-    const BOT_ID   = 'Fexkxwkxg677RTx6Z0WN';
-    const API_KEY  = 'DOCSBOT_API_KEY';
+    // ───────────  CONFIG  ───────────
+    const BOT_ID   = 'Fexkxwkxg677RTx6Z0WN';           // safe to expose
+    const BASE_URL = '/.netlify/functions/docsbot';    // Netlify proxy
 
-    /* Endpoints – update if DocsBot changes path structure */
-    const BASE_URL     = 'https://api.docsbot.ai';
-    const CHAT_URL     = `${BASE_URL}/chat`;
-    const SEARCH_URL   = `${BASE_URL}/search`;
-    const RATE_URL     = `${BASE_URL}/rate`;      // + /{answerId}
-
-    // ─────────────  DOM refs  ─────────────
-    const form         = document.getElementById('searchForm');
-    const input        = document.getElementById('queryInput');
-    const answerCard   = document.getElementById('answerCard');
-    const answerH      = document.getElementById('answerHeading');
-    const answerBody   = document.getElementById('answerBody');
-    const sourcesUL    = document.getElementById('sources');
-    const resultsOL    = document.getElementById('results');
-    const loadMoreBtn  = document.getElementById('loadMore');
+    // ───────────  DOM  ───────────
+    const form       = document.getElementById('searchForm');
+    const input      = document.getElementById('queryInput');
+    const answerCard = document.getElementById('answerCard');
+    const answerH    = document.getElementById('answerHeading');
+    const answerBody = document.getElementById('answerBody');
+    const sourcesUL  = document.getElementById('sources');
+    const resultsOL  = document.getElementById('results');
 
     let lastAnswerId = null;
-    let latestQuery = '';
-    let topK = 20;        // batch size for results
+    let latestQuery  = '';
+    let topK = 20;
 
-    /* Utilities */
+    // ───────────  HELPERS  ───────────
     function highlight(text, term){
-      return text.replace(new RegExp(term, 'ig'), match=>`<mark>${match}</mark>`);
+      return text.replace(new RegExp(term, 'ig'), m=>`<mark>${m}</mark>`);
     }
 
-    async function docsbotFetch(url, body){
-      const res = await fetch(url, {
+    async function docsbotFetch(path, payload){
+      const res = await fetch(BASE_URL, {
         method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'Authorization':`Bearer ${API_KEY}`
-        },
-        body:JSON.stringify(body)
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ path, payload })
       });
       if(!res.ok) throw new Error(await res.text());
       return res.json();
     }
 
-    async function getAnswer(q){
-      /* Adjust payload according to DocsBot spec */
-      return docsbotFetch(CHAT_URL, {
-        botId: BOT_ID,
-        question: q,
-        answerWithSources: true
-      });
-    }
+    const getAnswer  = q     => docsbotFetch('/chat',   { botId:BOT_ID, question:q, answerWithSources:true });
+    const getResults = (q,k) => docsbotFetch('/search', { botId:BOT_ID, query:q, top_k:k });
+    const rateAnswer = (id,v)=> docsbotFetch('/rate',   { answerId:id, rating:v });
 
-    async function getResults(q, k){
-      return docsbotFetch(SEARCH_URL, {
-        botId: BOT_ID,
-        query: q,
-        top_k: k
-      });
-    }
-
-    function renderAnswer(answer){
-      answerCard.hidden = false;
+    function renderAnswer(ans){
       answerH.textContent = input.value.trim();
-      answerBody.innerHTML = answer.answer;
-      sourcesUL.innerHTML = answer.sources.slice(0,3).map(s=>`<li><a href="${s.url}">${s.title}</a></li>`).join('');
-      lastAnswerId = answer.id;
+      answerBody.innerHTML = ans.answer;
+      sourcesUL.innerHTML = ans.sources.slice(0,3).map(s=>`<li><a href="${s.url}">${s.title}</a></li>`).join('');
+      answerCard.style.display = 'block';
+      lastAnswerId = ans.id;
     }
 
     function renderResults(list){
-      resultsOL.innerHTML = list.map(chunk=>{
-        const title = chunk.title || chunk.url;
-        const url   = chunk.url;
-        const snippet = highlight(chunk.content.slice(0,160)+'…', latestQuery);
+      resultsOL.innerHTML = list.map(c=>{
+        const title = c.title || c.url;
+        const url = c.url;
+        const snippet = highlight((c.content||'').slice(0,160)+'…', latestQuery);
         return `<li class="result"><a class="title" href="${url}">${title}</a><p class="snippet">${snippet}</p></li>`;
       }).join('');
     }
 
     async function runSearch(q){
       latestQuery = q;
-      answerCard.hidden = true;
+      answerCard.style.display = 'none';
       resultsOL.innerHTML = '<p>Loading results…</p>';
       try{
-        const [answer,res] = await Promise.all([
-          getAnswer(q),
-          getResults(q, topK)
-        ]);
-        renderAnswer(answer);
+        const [ans,res] = await Promise.all([ getAnswer(q), getResults(q,topK) ]);
+        renderAnswer(ans);
         renderResults(res.results || res.chunks || []);
-      }catch(err){
-        resultsOL.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+      }catch(e){
+        resultsOL.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
       }
     }
 
-    /* Feedback */
-    answerCard.addEventListener('click', e=>{
-      if(!e.target.classList.contains('feedbackBtn')) return;
-      const val = Number(e.target.dataset.val);
-      if(!lastAnswerId) return;
-      fetch(`${RATE_URL}/${lastAnswerId}`,{
-        method:'PUT',
-        headers:{'Authorization':`Bearer ${API_KEY}`,'Content-Type':'application/json'},
-        body:JSON.stringify({rating:val})
-      }).catch(console.error);
-    });
-
-    /* Submit */
+    // submit handler
     form.addEventListener('submit', e=>{
       e.preventDefault();
       const q = input.value.trim();
       if(q) runSearch(q);
     });
 
-    // Optional: pre‑fill from ?q= param
+    // feedback buttons
+    answerCard.addEventListener('click', e=>{
+      if(!e.target.classList.contains('feedbackBtn')) return;
+      if(!lastAnswerId) return;
+      const val = Number(e.target.dataset.val);
+      rateAnswer(lastAnswerId,val).catch(console.error);
+    });
+
+    // preload query from URL ?q=
     const qParam = new URLSearchParams(location.search).get('q');
     if(qParam){ input.value = qParam; runSearch(qParam); }
   </script>
 </body>
 </html>
-
