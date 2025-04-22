@@ -12,7 +12,7 @@ exports.handler = async (event) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.DOCSBOT_KEY}`,
+      'Authorization': `Bearer ${process.env.DOCSBOT_API_KEY}`,
     },
     body: JSON.stringify(payload),
   });
