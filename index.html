@@ -5,21 +5,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KCF Technologies — Site Search</title>
+  <!-- -------------  STYLES  ------------- -->
   <style>
     :root {
+      --kcf-navy: #08163D; /* updated brand header blue */
       --kcf-blue: #003e6b;
       --kcf-accent: #00aeef;
     }
     *{box-sizing:border-box;}
     body{margin:0;font-family:"Inter","Helvetica Neue",Arial,sans-serif;line-height:1.45;color:#1a1d1f;background:#fff;}
 
-    /* Full‑width brand image */
+    /* Full‑width hero image */
     .hero-img{display:block;width:100%;height:auto;object-fit:cover;}
 
-    /* Header nav + search */
-    header{background:var(--kcf-blue);padding:20px clamp(16px,5vw,64px);display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
-    header a.logo{color:#fff;font-size:24px;font-weight:600;text-decoration:none;display:flex;align-items:center;}
-
+    /* Header with search */
+    header{background:var(--kcf-navy);padding:20px clamp(16px,5vw,64px);display:flex;align-items:center;gap:40px;flex-wrap:wrap;}
     form#searchForm{flex:1 1 480px;position:relative;}
     #queryInput{width:100%;padding:14px 48px 14px 20px;border-radius:8px;border:none;font-size:18px;}
     #searchBtn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:20px;cursor:pointer;color:#444;}
@@ -47,17 +47,20 @@
     aside.cta h3{margin:0;font-size:22px;color:var(--kcf-blue);} 
     .btn-demo{border:2px solid var(--kcf-blue);background:none;padding:10px 20px;border-radius:6px;font-weight:600;cursor:pointer;}
   </style>
+  <!-- marked.js for markdown → HTML rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
   <img src="kcf header.jpg" alt="KCF Technologies visual header" class="hero-img" />
 
   <header>
-    <a href="/" class="logo">KCF</a>
+    <!-- removed "KCF" logo per request -->
     <form id="searchForm" role="search">
       <input id="queryInput" type="search" placeholder="Search machine‑health topics…" />
       <button id="searchBtn" aria-label="search">🔍</button>
     </form>
   </header>
+
   <section class="wrap">
     <main>
       <article id="answerCard">
@@ -82,12 +85,11 @@
     </aside>
   </section>
 
+  <!-- -------------  SCRIPT  ------------- -->
   <script>
-    // ───────────  CONFIG  ───────────
-    const BOT_ID   = 'Fexkxwkxg677RTx6Z0WN';           // safe to expose
-    const BASE_URL = '/.netlify/functions/docsbot';    // Netlify proxy
+    const BOT_ID   = 'Fexkxwkxg677RTx6Z0WN';
+    const BASE_URL = '/.netlify/functions/docsbot';
 
-    // ───────────  DOM  ───────────
     const form       = document.getElementById('searchForm');
     const input      = document.getElementById('queryInput');
     const answerCard = document.getElementById('answerCard');
@@ -100,7 +102,6 @@
     let latestQuery  = '';
     let topK = 20;
 
-    // ───────────  HELPERS  ───────────
     function highlight(text, term){
       return text.replace(new RegExp(term, 'ig'), m=>`<mark>${m}</mark>`);
     }
@@ -121,7 +122,8 @@
 
     function renderAnswer(ans){
       answerH.textContent = input.value.trim();
-      answerBody.innerHTML = ans.answer;
+      // Convert markdown to HTML via marked
+      answerBody.innerHTML = marked.parse(ans.answer || '');
       sourcesUL.innerHTML = ans.sources.slice(0,3).map(s=>`<li><a href="${s.url}">${s.title}</a></li>`).join('');
       answerCard.style.display = 'block';
       lastAnswerId = ans.id;
@@ -145,18 +147,16 @@
         renderAnswer(ans);
         renderResults(res.results || res.chunks || []);
       }catch(e){
-        resultsOL.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
+        resultsOL.innerHTML = `<p style="color:red;">${e.message}</p>`;
       }
     }
 
-    // submit handler
     form.addEventListener('submit', e=>{
       e.preventDefault();
       const q = input.value.trim();
       if(q) runSearch(q);
     });
 
-    // feedback buttons
     answerCard.addEventListener('click', e=>{
       if(!e.target.classList.contains('feedbackBtn')) return;
       if(!lastAnswerId) return;
@@ -164,7 +164,6 @@
       rateAnswer(lastAnswerId,val).catch(console.error);
     });
 
-    // preload query from URL ?q=
     const qParam = new URLSearchParams(location.search).get('q');
     if(qParam){ input.value = qParam; runSearch(qParam); }
   </script>
