@@ -1,0 +1,6 @@
+[build]
+  publish   = "."                 # "." because index.html is in the repo root
+  functions = "netlify/functions" # where docsbot.js lives
+
+[functions.docsbot]               # match the file name (without .js)
+  timeout = 26                    # seconds – max allowed on the free tier
